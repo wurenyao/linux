@@ -1,0 +1,107 @@
+CADMesh安装和运行
+安装：
+mkdir build
+cd build
+
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=<optional install location>
+sudo make install
+
+VERBOSE=1
+修改cmakelist.txt
+VERBOSE=1
+修改.barshc:
+Make sure the CADMesh library is in your path:
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<cadmesh install location>/lib
+or on a Mac:
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:<cadmesh install location>/lib
+
+运行：
+自己的dell：
+cmake -DGeant4_DIR=/home/wurenyao/geant4/geant4.10.06.p02/lib/Geant4-10.6.2 -DG4mpi_DIR=/home/wurenyao/geant4/geant4.10.06.p02/lib/Geant4-10.6.2/lib/G4mpi-10.6.2 .. -DCMAKE_INSTALL_PREFIX:PATH=/home/wurenyao/g4work/CADMesh-1.1-install
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/home/wurenyao/g4work/CADMesh-1.1-install
+217：
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/gpfs/geng/wry/CAD/CADmesh_install
+210dell：
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/home/iint/wry/cad
+
+make
+./cadmesh_example ../macros/vis.mac ../Airliner\ 757\ \(base\ colour\).obj OBJ
+make
+
+安装CADMesh1.1注意：
+由本机直接拷贝：CADMesh
+                            CADMesh_install
+这两个文件夹。
+
+修改.bashrc：
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<cadmesh install location>/lib
+或者修改.sh文件
+
+修改安装目录/lib文件夹下配置文件：cmake/cadmesh-1.1.0
+                                                           pkgconfig/assimp.pc
+
+geant4的lib可能有所不同:
+geant4.10.05.p01-install/lib/libG4zlib.so
+geant4.10.05.p01-build/BuildProducts/lib/libG4zlib.so
+可能需要复制。（路径问题已经在上步解决，后续warning可依照报错原因解决）
+
+
+mpi
+安装：sudo apt-get install mpich
+(不需要环境变量)
+安装G4mpi：
+/home/wurenyao/geant4/geant4.10.05.p01/examples/extended/parallel/MPI/README
+
+编译：
+cmake -DGeant4_DIR=/home/wurenyao/geant4/geant4.10.06.p02/lib/Geant4-10.6.2 -DG4mpi_DIR=/home/wurenyao/geant4/geant4.10.06.p02/lib/Geant4-10.6.2/lib/G4mpi-10.6.2 ..
+make
+运行：
+mpirun -n 4 ./exMPI03 run.mac(示例)
+
+mpi/beamOn  （总数）
+/run/beamOn  (每个线程)
+
+学校高性能计算机：
+1.环境变量：. env.sh
+2.module load gcc/8.3.0
+3.编译：（非mpi）/fs0/home/70206584/geant4/cmake-3.10.0-Linux-x86_64/bin/cmake ..
+          (mpi)/fs0/home/70206584/geant4/cmake-3.10.0-Linux-x86_64/bin/cmake -DGeant4_DIR=/fs0/home/70206584/geant4/geant4.10.06.p02/lib64/Geant4-10.6.2 -DG4mpi_DIR=/fs0/home/70206584/geant4/geant4.10.06.p02/lib64/lib64/G4mpi-10.6.2 ..(mpi需加载mpich模块$module load mpich/3.3.2)
+4.运行：./example run.mac
+        mpirun -n 4 ./exMPI03 run.mac
+
+5.dos2unix 文件名（脚本文件格式转换）
+
+运行脚本示例：
+#!/bin/bash
+#SBATCH -J BNCT_TF
+#SBATCH -p cpu
+#SBATCH -n 80
+#SBATCH --error=%J.err
+#SBATCH --output=%J.out
+module load mpich/3.3.2
+module load gcc/8.3.0
+source /fs0/home/70206584/env.sh
+cd /fs0/home/70206584/wurenyao/BNCT_mpi/build
+mpirun -n 80 ./exampleB1 run1.mac
+scontrol show job $SLURM_JOBID
+
+
+217运行程序（geant4 和mcnp）
+Geant4：
+管理节点编译：source /gpfs/geng/g105
+                            cmake ..
+make
+子节点运行：ssh c01n02
+                        cd 目标路径
+                        mpdboot -n 14 -f /gpfs/ding/mpd.hosts
+                        source /gpfs/geng/g105
+                        chmod 777 run.sh
+                        ./run.sh
+MCNP:
+复制文件进相应文件夹/gpfs/ding/run-nuaa/wyy/inp/
+                                         在/gpfs/ding/run-nuaa/wyy/文件夹下
+                                          chmod 777 run
+                                           ./run   
+Git clone：
+git clone https://gitee.com/yadong.zhang/DBlog.git F:/myProject/
+
