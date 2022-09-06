@@ -23,6 +23,12 @@ cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/home/wurenyao/g4work/CADMesh-1.1-install
 cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/gpfs/geng/wry/CAD/CADmesh_install
 210dell：
 cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/home/iint/wry/cad
+210dell的mpi运行
+cmake -DGeant4_DIR=/opt/G4/geant4_10_06_p01_mpi-install/lib/G4mpi-10.6.1 -DG4mpi_DIR=/opt/G4/geant4_10_06_p01_mpi-install/mpi/lib/G4mpi-10.6.1 .. -DCMAKE_INSTALL_PREFIX:PATH=/home/iint/wry/cad/
+210的3号机
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/home/ac2nt/wry/
+
+210dell
 
 make
 ./cadmesh_example ../macros/vis.mac ../Airliner\ 757\ \(base\ colour\).obj OBJ
@@ -105,3 +111,26 @@ MCNP:
 Git clone：
 git clone https://gitee.com/yadong.zhang/DBlog.git F:/myProject/
 
+
+重启217服务器
+14个节点全部关闭
+重启电脑
+输入用户名和密码（root ac2ntgeng2020）
+打开14个节点
+Mm----命令激活节点
+
+217服务器
+Mpi：
+cmake -DCMAKE_PREFIX_PATH=/gpfs/soft/geant4/geant4_10_07/geant4.10.07.p01/lib64/Geant4-10.7.1/G4mpi-10.7/lib64 ..
+（mpi运行需注意cmakelist）
+
+新217
+source /gpfs/soft/geant4/env.sh
+cmake -DGeant4_DIR=/gpfs/soft/geant4/geant4_10_07/geant4.10.07.p01/lib64/Geant4-10.7.1 -DG4mpi_DIR=/gpfs/soft/geant4/geant4_10_07/geant4.10.07.p01/lib64/Geant4-10.7.1/G4mpi-10.7/lib64/G4mpi-10.7.1 .. -DCMAKE_INSTALL_PREFIX:PATH=/gpfs/soft/CADMesh-1.1-install/
+make
+mpirun -n 1 ./exampleB1 run.mac
+
+HY
+Mpi：
+PATH=$PATH://home/HY/mpich-install/bin/
+cmake -DGeant4_DIR=/home/HY/geant4.10.05/geant4.10.05/-DGEANT4_USE_OPENGL_X11=ON/lib64/Geant4-10.5.0 -DG4mpi_DIR=/home/HY/geant4.10.05/geant4.10.05/-DGEANT4_USE_OPENGL_X11=ON/lib64/lib64/G4mpi-10.5.0 ..
